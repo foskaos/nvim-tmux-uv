@@ -16,7 +16,7 @@ function M.setup(opts)
     opts = opts or {}
     M.target_pane = opts.target_pane or M.target_pane
 
-    vim.keymap.set('n', opts.keymap or '<leader>r', M.run_buffer, {
+    vim.keymap.set('n', opts.keymap or '<leader>uv', M.run_buffer, {
         noremap = true,
         silent = true,
         desc = 'Run buffer in tmux pane and swich'
