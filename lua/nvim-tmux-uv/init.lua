@@ -1,7 +1,7 @@
 local M = {}
 
 local uv = vim.loop
-M.target_pane = ':.1'
+M.target_pane = ":1"
 
 -- Check if the tmux pane exists
 local function pane_exists(pane, callback)
@@ -34,9 +34,9 @@ end
 
 -- Run the current buffer in the configured tmux pane
 function M.run_buffer()
-	local file = vim.fn.expand('%:p') -- absolute path
+	local file = vim.fn.expand("%:p") -- absolute path
 	local send_cmd = string.format('tmux send-keys -t %s "uv run %s" Enter', M.target_pane, file)
-	local switch_cmd = string.format('tmux select-pane -t %s', M.target_pane)
+	local switch_cmd = string.format("tmux select-pane -t %s", M.target_pane)
 
 	pane_exists(M.target_pane, function(exists)
 		if exists then
@@ -53,10 +53,10 @@ function M.setup(opts)
 	opts = opts or {}
 	M.target_pane = opts.target_pane or M.target_pane
 
-	vim.keymap.set('n', opts.keymap or '<leader>uv', M.run_buffer, {
+	vim.keymap.set("n", opts.keymap or "<leader>uv", M.run_buffer, {
 		noremap = true,
 		silent = true,
-		desc = 'Run buffer in tmux pane and switch',
+		desc = "Run buffer in tmux pane and switch",
 	})
 end
 
