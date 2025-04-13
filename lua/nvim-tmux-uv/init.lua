@@ -1,11 +1,11 @@
 local M = {}
 
 local uv = vim.loop
-M.target_pane = ":1"
+M.target_pane = ":.1"
 
 -- Check if the tmux pane exists
 local function pane_exists(pane, callback)
-	local handle = io.popen('tmux list-panes -F "#{pane_id}"')
+	local handle = io.popen(string.format('tmux display-message -p -t "%s" "#{pane_id}" 2>/dev/null', pane))
 	if not handle then
 		callback(false)
 		return
@@ -14,11 +14,9 @@ local function pane_exists(pane, callback)
 	local result = handle:read("*a")
 	handle:close()
 
-	-- Escape `%` for Lua patterns
-	local escaped_pane = pane:gsub("%%", "%%%%")
-	callback(result:match(escaped_pane) ~= nil)
+	-- If result is non-empty, the pane exists
+	callback(result ~= nil and result ~= "")
 end
-
 -- Run a tmux command asynchronously
 local function async_tmux_cmd(cmd)
 	uv.spawn("sh", {
